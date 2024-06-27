@@ -7,7 +7,7 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCabin } from "../../services/apiCabins";
+import { createEditCabin } from "../../services/apiCabins";
 import toast from "react-hot-toast";
 import FormRow from "../../ui/FormRow";
 
@@ -38,22 +38,13 @@ const FormRow2 = styled.div`
   }
 `;
 
-const Label = styled.label`
-  font-weight: 500;
-`;
-
-const Error = styled.span`
-  font-size: 1.4rem;
-  color: var(--color-red-700);
-`;
-
 function CreateCabinForm({ cabinToEdit }) {
   const { register, handleSubmit, reset, getValues, formState } = useForm();
   const { errors } = formState;
   console.log(errors);
   const QueryClient = useQueryClient();
   const { isLoading: isAdded, mutate } = useMutation({
-    mutationFn: createCabin,
+    mutationFn: createEditCabin,
     onSuccess: () => {
       toast.success("Cabin Added Successfulley");
       QueryClient.invalidateQueries({

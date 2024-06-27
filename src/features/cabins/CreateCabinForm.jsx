@@ -7,20 +7,20 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCabin } from "../../services/apiCabins";
+import { createEditCabin } from "../../services/apiCabins";
 import FormRow from "../../ui/FormRow";
 
 function CreateCabinForm({ cabinToEdit = {} }) {
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
   const { register, handleSubmit, reset, getValues, formState } = useForm({
-    defaultValue: isEditSession ? editValues : {},
+    defaultValues: isEditSession ? editValues : {},
   });
   const { errors } = formState;
-  console.log(errors);
   const QueryClient = useQueryClient();
-  const { isLoading: isAdded, mutate } = useMutation({
-    mutationFn: createCabin,
+
+  const { isLoading: isCreated, mutate: createCabin } = useMutation({
+    mutationFn: createEditCabin,
     onSuccess: () => {
       toast.success("Cabin Added Successfulley");
       QueryClient.invalidateQueries({
@@ -30,8 +30,29 @@ function CreateCabinForm({ cabinToEdit = {} }) {
     },
     onError: (error) => toast.error(error.message),
   });
+
+  const { isLoading: isEdit, mutate: editCabin } = useMutation({
+    mutationFn: ({ newCabinData, id }) => createEditCabin(newCabinData, id),
+    onSuccess: () => {
+      toast.success("Cabin Edit Successfulley");
+      QueryClient.invalidateQueries({
+        queryKey: ["cabin"],
+      });
+      reset();
+    },
+    onError: (error) => toast.error(error.message),
+  });
+
+  const isWorking = isCreated || isEdit;
+
   function onSubmit(data) {
-    mutate({ ...data, image: data.image[0] });
+    const image = typeof data.image === "string" ? data.image : data.image[0];
+
+    if (isEditSession) {
+      editCabin({ newCabinData: { ...data, image }, id: editId });
+    } else {
+      createCabin({ ...data, image: image });
+    }
   }
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -112,7 +133,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button disabled={isAdded}>
+        <Button disabled={isWorking}>
           {isEditSession ? "Edit Cabin" : "Create New cabin"}
         </Button>
       </FormRow>
