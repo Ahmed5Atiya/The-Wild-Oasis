@@ -1,3 +1,5 @@
+import { useForm } from "react-hook-form";
+import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
@@ -6,6 +8,8 @@ import useEditSettings from "./useEditSettings";
 import useSettings from "./useSettings";
 
 function UpdateSettingsForm() {
+  const { register, handleSubmit } = useForm();
+
   const {
     isLoading,
     data: {
@@ -17,22 +21,20 @@ function UpdateSettingsForm() {
   } = useSettings();
   const { isEdit, editSettings } = useEditSettings();
 
-  function handelUpdate(e, field) {
-    const { value } = e.target;
-    if (!value) return;
-    editSettings({ [field]: value });
-    console.log(value);
-  }
   if (isLoading) return <Spinner />;
+  function onSubmit(data) {
+    editSettings(data);
+  }
   return (
-    <Form>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow label="Minimum nights/booking">
         <Input
           type="number"
           disabled={isEdit}
           id="min-nights"
           defaultValue={minBookingLength}
-          onBlur={(e) => handelUpdate(e, "minBookingLength")}
+          // onBlur={(e) => handelUpdate(e, "minBookingLength")}
+          {...register("minBookingLength")}
         />
       </FormRow>
       <FormRow label="Maximum nights/booking">
@@ -41,7 +43,8 @@ function UpdateSettingsForm() {
           type="number"
           id="max-nights"
           defaultValue={maxBookingLength}
-          onBlur={(e) => handelUpdate(e, "maxBookingLength")}
+          // onBlur={(e) => handelUpdate(e, "minBookingLength")}
+          {...register("maxBookingLength")}
         />
       </FormRow>
       <FormRow label="Maximum guests/booking">
@@ -50,7 +53,8 @@ function UpdateSettingsForm() {
           type="number"
           id="max-guests"
           defaultValue={maxGustesPrice}
-          onBlur={(e) => handelUpdate(e, "maxGustesPrice")}
+          // onBlur={(e) => handelUpdate(e, "minBookingLength")}
+          {...register("maxGustesPrice")}
         />
       </FormRow>
       <FormRow label="Breakfast price">
@@ -59,9 +63,11 @@ function UpdateSettingsForm() {
           type="number"
           id="breakfast-price"
           defaultValue={breakfastPrice}
-          onBlur={(e) => handelUpdate(e, "breakfastPrice")}
+          // onBlur={(e) => handelUpdate(e, "minBookingLength")}
+          {...register("breakfastPrice")}
         />
       </FormRow>
+      <Button onClick={handleSubmit}>Update Settings</Button>
     </Form>
   );
 }
