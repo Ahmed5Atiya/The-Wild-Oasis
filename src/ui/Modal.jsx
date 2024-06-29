@@ -1,7 +1,15 @@
-import { cloneElement, createContext, useContext, useState } from "react";
+import {
+  cloneElement,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
+import useCloseModel from "../hooks/useCloseModel";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -78,11 +86,26 @@ function Open({ children, opens: opensWindoName }) {
 
 function Windo({ children, name }) {
   const { openName, close } = useContext(ModelContext);
+  const ref = useRef();
+  // useEffect(
+  //   function () {
+  //     function handelClick(e) {
+  //       if (ref.current && !ref.current.contains(e.target)) {
+  //         console.log("ClickOut");
+  //         close();
+  //       }
+  //     }
+  //     document.addEventListener("click", handelClick, true);
 
+  //     return () => document.removeEventListener("click", handelClick, true);
+  //   },
+  //   [close]
+  // );
+  useCloseModel(ref, close);
   if (name !== openName) return null;
   return createPortal(
     <Overlay>
-      <StyledModal>
+      <StyledModal ref={ref}>
         <Button onClick={close}>
           <HiXMark />
         </Button>
