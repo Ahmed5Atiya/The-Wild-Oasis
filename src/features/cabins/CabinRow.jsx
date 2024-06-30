@@ -6,6 +6,8 @@ import useCreateCabin from "./useCreateCabin";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Table from "../../ui/Table";
+import Menus from "../../ui/Menus";
+import Menu from "../../ui/Menus";
 // const TableRow = styled.div`
 //   display: grid;
 //   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
@@ -70,29 +72,30 @@ function CabinRow({ cabin }) {
       {discount ? <Discount>${discount}</Discount> : <span>&mdash;</span>}
       {/* <button onClick={() => deleteCabins(id)}>Delete</button> */}
       <div>
-        <button onClick={handelDublecate}>
-          <HiSquare2Stack />
-        </button>
         <Modal>
-          <Modal.Open opens="edit">
-            <button>
-              <HiPencil />
-            </button>
-          </Modal.Open>
-          <Modal.Windo name="edit">
-            <CreateCabinForm cabinToEdit={cabin} />
-          </Modal.Windo>
-          <Modal.Open opens="cabin">
-            <button>
-              <HiTrash />
-            </button>
-          </Modal.Open>
-          <Modal.Windo name="cabin">
-            <ConfirmDelete
-              onConfirm={() => deleteCabin(id)}
-              disabled={isDeleteing}
-            />
-          </Modal.Windo>
+          <Menus.Menu>
+            <Menus.Toggle id={id} />
+            <Menus.List id={id}>
+              <Menus.Button icon={<HiSquare2Stack />} onClick={handelDublecate}>
+                Duplicate
+              </Menus.Button>
+              <Modal.Open opens="edit">
+                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+              </Modal.Open>{" "}
+              <Modal.Open opens="cabin">
+                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+              </Modal.Open>
+            </Menus.List>
+            <Modal.Windo name="edit">
+              <CreateCabinForm cabinToEdit={cabin} />
+            </Modal.Windo>
+            <Modal.Windo name="cabin">
+              <ConfirmDelete
+                onConfirm={() => deleteCabin(id)}
+                disabled={isDeleteing}
+              />
+            </Modal.Windo>
+          </Menus.Menu>
         </Modal>
       </div>
     </Table.Row>
