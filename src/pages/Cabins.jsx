@@ -6,6 +6,7 @@ import Button from "../ui/Button";
 import { useState } from "react";
 import AddCabin from "../features/cabins/AddCabin";
 import CabinTableOperations from "../features/cabins/CabinTableOperations";
+import SortedBy from "../ui/SortedBy";
 
 function Cabins() {
   return (
