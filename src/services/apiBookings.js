@@ -1,13 +1,17 @@
 import supabase from "./supabase";
 
-export async function getBookings({ filter }) {
+export async function getBookings({ filter, sortBy }) {
   let query = supabase
     .from("bookings")
     .select(
       "id, created_at, startDate, endDate, numNights, totalPrice, numGuests, status, cabins(name), guests(fullName , email)"
     );
-
+  // 1) FILTER
   if (filter !== null) query = query.eq(filter.field, filter.value);
+
+  // 2) SORT BY
+  if (sortBy)
+    query.order(sortBy.field, { ascending: sortBy.direction === "asc" });
   let { data, error } = await query;
   if (error) {
     console.error(error);
