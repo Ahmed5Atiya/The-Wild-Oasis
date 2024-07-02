@@ -93,7 +93,6 @@ function Body({ data, render }) {
   if (!data.length) return <Empty>You not Have the data to show</Empty>;
   return <StyledBody columns={columns}>{data.map(render)}</StyledBody>;
 }
-
 Table.Row = Row;
 Table.Header = Header;
 Table.Footer = Footer;
