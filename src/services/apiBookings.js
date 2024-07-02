@@ -28,7 +28,6 @@ export async function getBookings({ filter, sortBy, page }) {
     console.error(error);
     throw new Error("Booking not found");
   }
-  console.log(data);
   return { count, data };
 }
 

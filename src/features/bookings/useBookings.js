@@ -1,8 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getBookings } from "../../services/apiBookings";
 import { useSearchParams } from "react-router-dom";
-import SortedBy from "../../ui/SortedBy";
-import Pagination from "../../ui/Pagination";
+
 import { PAGE_SIZE } from "../../utils/Constant";
 
 export function useBookings() {

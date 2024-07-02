@@ -97,7 +97,6 @@ function Toggle({ id }) {
     useContext(MenuContext);
   function handelClick(e) {
     const rect = e.target.closest("button").getBoundingClientRect();
-    console.log(rect);
     setPosition({
       x: window.innerWidth - rect.width - rect.x,
       y: rect.y + rect.height + 8,
