@@ -10,6 +10,7 @@ import { format } from "date-fns/format";
 import Menus from "../../ui/Menus";
 import { HiEye } from "react-icons/hi";
 import { Navigate, useNavigate } from "react-router-dom";
+import { HiArrowDownCircle } from "react-icons/hi2";
 
 // import { formatCurrency } from "../../utils/helpers";
 // import { formatDistanceFromNow } from "../../utils/helpers";
@@ -96,6 +97,14 @@ function BookingRow({
           >
             See details
           </Menus.Button>
+          {status === "unconfirmed" && (
+            <Menus.Button
+              icon={<HiArrowDownCircle />}
+              onClick={() => navigate(`/checkin/${bookingId}`)}
+            >
+              Check in
+            </Menus.Button>
+          )}
         </Menus.List>
       </Menus.Menu>
     </Table.Row>
