@@ -8,6 +8,7 @@ const StyledHeader = styled.header`
   align-items: center;
   justify-content: flex-end;
   gap: 20px;
+  background-color: var(--color-grey-0);
 `;
 function Header() {
   return (
