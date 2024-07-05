@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from "recharts";
 import { useDarkMode } from "../../context/DarkModeContext";
+import Spinner from "../../ui/Spinner";
 
 const ChartBox = styled.div`
   /* Box */
@@ -79,37 +80,37 @@ const startDataDark = [
   },
   {
     duration: "2 nights",
-    value: 0,
+    value: 2,
     color: "#c2410c",
   },
   {
     duration: "3 nights",
-    value: 0,
+    value: 6,
     color: "#a16207",
   },
   {
     duration: "4-5 nights",
-    value: 0,
+    value: 1,
     color: "#4d7c0f",
   },
   {
     duration: "6-7 nights",
-    value: 0,
+    value: 4,
     color: "#15803d",
   },
   {
     duration: "8-14 nights",
-    value: 0,
+    value: 2,
     color: "#0f766e",
   },
   {
     duration: "15-21 nights",
-    value: 0,
+    value: 1,
     color: "#1d4ed8",
   },
   {
     duration: "21+ nights",
-    value: 0,
+    value: 9,
     color: "#7e22ce",
   },
 ];
@@ -141,52 +142,18 @@ function prepareData(startData, stays) {
   return data;
 }
 
-function DurationChart({ confirmedStays }) {
-  // const { isDarkMode } = useDarkMode();
-  // const startData = isDarkMode ? startDataDark : startDataLight;
-  // const data = prepareData(startData, confirmedStays);
+function DurationChart({ confirmedStays, isLoadingStays }) {
+  const { isDarkMode } = useDarkMode();
+  const startData = isDarkMode ? startDataDark : startDataLight;
+  if (isLoadingStays) return <Spinner />;
+  const dataWill = prepareData(startData, confirmedStays);
   return (
-    // <ChartBox>
-    //   <Heading as="h2">Stay duration Sammary</Heading>
-    //   <ResponsiveContainer>
-    //     <PieChart>
-    //       <Pie
-    //         data={startDataLight}
-    //         nameKey="duration"
-    //         dataKey="value"
-    //         innerRadius={85}
-    //         outerRadius={110}
-    //         cx="40%"
-    //         cy="50%"
-    //         paddingAngle={5}
-    //       >
-    //         {startDataLight.map((entry) => (
-    //           <Cell
-    //             fill={entry.color}
-    //             key={entry.duration}
-    //             stroke={entry.color}
-    //           />
-    //         ))}
-    //       </Pie>
-    //       <Tooltip />
-    //       <Legend
-    //         verticalAlign="middle"
-    //         iconType="circle"
-    //         iconSize={15}
-    //         layout="vertical"
-    //         align="right"
-    //         width="30%"
-    //       />
-    //     </PieChart>
-    //   </ResponsiveContainer>
-    // </ChartBox>
-
     <ChartBox>
       <Heading as="h2">Stay duration Sammary</Heading>
       <ResponsiveContainer width="100%" height={240}>
         <PieChart>
           <Pie
-            data={startDataLight} // Pass processed data with non-zero values
+            data={startDataDark} // Pass processed data with non-zero values
             nameKey="duration"
             dataKey="value"
             innerRadius={85}
@@ -195,7 +162,7 @@ function DurationChart({ confirmedStays }) {
             cy="50%"
             paddingAngle={5}
           >
-            {startDataLight.map((entry) => (
+            {startDataDark.map((entry) => (
               <Cell
                 fill={entry.color}
                 key={entry.duration}
